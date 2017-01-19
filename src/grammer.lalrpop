@@ -1,0 +1,29 @@
+use std::str::FromStr;
+
+grammar;
+
+pub Term: Term = {
+  r"\\" "(" <v:Variable> ":" <t:Term> ")" "->" <b:Term> =>
+    Term::Abs(v, box t, box b),
+  "forall" "(" <v:Variable> ":" <t:Term> ")" "->" <b:Term> =>
+    Term::Pi(v, box t, box b),
+  <t:Apply> "->" <b:Term> =>
+    Term::Pi(Var::new(""), box t, box b),
+  Apply => <>,
+};
+
+Variable: Name = {
+  <r"[a-zA-Z_]+[a-zA-Z_0-9]*"> => <>
+};
+
+
+
+Apply: T = {
+  <f:Apply> <p:T> => Term::App(box f, box p),
+  T => <>,
+};
+
+T: Term = {
+  "(" <Term> ")" => <>,
+  <Variable> => Term::Var(<>),
+};

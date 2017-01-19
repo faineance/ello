@@ -59,14 +59,19 @@ fn substitute(name: Name, with: Term, body: Term) -> Term {
                 Let(var, box substitute(name, with, *t1), t2)
             } else {
                 Let(var,
-                   box substitute(name.clone(), with.clone(), *t1),
-                   box substitute(name, with, *t2))
+                    box substitute(name.clone(), with.clone(), *t1),
+                    box substitute(name, with, *t2))
             }
         }
     }
-} 
+}
 
 
 fn alpha_rename(term: Term) -> Term {
-    unimplemented!();
+    unimplemented!()
+}
+
+
+fn alpha_equivelent(t1: Term, t2: Term) -> bool {
+    unimplemented!()
 }

@@ -2,5 +2,13 @@
 name = "ello"
 version = "0.1.0"
 authors = ["faineance <faineance@users.noreply.github.com>"]
+build = "build.rs"
 
 [dependencies]
+
+
+[dependencies.lalrpop-util]
+version = "0.12.4"
+
+[build-dependencies.lalrpop]
+version = "0.12.4"
