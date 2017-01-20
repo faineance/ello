@@ -1,6 +1,6 @@
-
+use std::collections::HashMap;
 use std::fmt::{Debug, Formatter, Error};
-
+use fresh::Fresh;
 type Name = String;
 #[derive(Clone)]
 enum Term {
@@ -67,11 +67,27 @@ fn substitute(name: Name, with: Term, body: Term) -> Term {
 }
 
 
-fn alpha_rename(term: Term) -> Term {
-    unimplemented!()
+fn alpha_rename(fresh: Fresh, g: HashMap<Name, Name>, term: Term) -> Term {
+    use self::Term::*;
+    match term {
+        Var(var) => Var(*g.get(&var).unwrap()), // proper error handling pls
+        App(f, arg) => {
+            App(box alpha_rename(fresh, g, *f),
+                box alpha_rename(fresh, g, *arg))
+        }
+        Abs(var, ty, body) => {
+          let _var = fresh.next();
+          Abs(_var, box alpha_rename(fresh, g, *ty))
+        }
+        // Abs(ref var, ref ty, ref body) => write!(fmt, "\\({:?} : {:?}) -> {:?}", var, ty, body),
+        // Pi(ref var, ref ty, ref body) => {
+        //     write!(fmt, "forall({:?} : {:?}) -> {:?}", var, ty, body) // a dependent type
+        // }
+        // Let(ref var, ref t1, ref t2) => write!(fmt, "let {:?} = {:?} in {:?}", var, t1, t2),
+    }
 }
 
 
-fn alpha_equivelent(t1: Term, t2: Term) -> bool {
+fn alpha_equivelent(fresh: Fresh, t1: Term, t2: Term) -> bool {
     unimplemented!()
 }
